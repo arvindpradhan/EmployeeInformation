@@ -1,0 +1,8 @@
+# Dependencies installed locally
+backend/node_modules/
+
+# Environment-specific secrets and configuration
+backend/.env
+
+# Logs
+*.log
