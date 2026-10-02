@@ -1,10 +1,12 @@
 const employeeQueries = require('../queries/employeeQueries');
 
-const getEmployees = async ({ page, limit, search }) => {
+const getEmployees = async ({ page, limit, search, sortBy,  sortOrder }) => {
   return await employeeQueries.getAllEmployees({
     page,
     limit,
-    search
+    search,
+    sortBy,
+    sortOrder
   });
 };
 const getEmployeeById = async (id) => {

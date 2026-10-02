@@ -1,29 +1,35 @@
 const Employee = require('../models/Employee');
 const { Op } = require("sequelize");
 
-const getAllEmployees = async ({ page = 1, limit = 10 , search }) => {
+const getAllEmployees = async ({
+  page = 1,
+  limit = 10,
+  search,
+  sortBy = "sequence",
+  sortOrder = "ASC"
+}) => {
 
-  // page = Number(page);
-  // limit = Number(limit);
+  page = Number(page);
+  limit = Number(limit);
   const offset = (page - 1) * limit;
 
-   const where = search
+  const where = search
     ? {
-        [Op.or]: [
-          { firstName: { [Op.like]: `%${search}%` } },
-          { lastName: { [Op.like]: `%${search}%` } },
-          { email: { [Op.like]: `%${search}%` } },
-          { department: { [Op.like]: `%${search}%` } },
-          { designation: { [Op.like]: `%${search}%` } }
-        ]
-      }
+      [Op.or]: [
+        { firstName: { [Op.like]: `%${search}%` } },
+        { lastName: { [Op.like]: `%${search}%` } },
+        { email: { [Op.like]: `%${search}%` } },
+        { department: { [Op.like]: `%${search}%` } },
+        { designation: { [Op.like]: `%${search}%` } }
+      ]
+    }
     : {};
 
   const result = await Employee.findAndCountAll({
     where,
     limit,
     offset,
-    order: [["sequence", "ASC"]],
+    order: [[sortBy, sortOrder]],
   });
 
   return {

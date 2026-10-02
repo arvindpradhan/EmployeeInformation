@@ -14,7 +14,24 @@ const employeeQuerySchema = Joi.object({
 
   search: Joi.string()
     .trim()
-    .allow("")
+    .allow(""),
+    
+  sortBy: Joi.string()
+    .valid(
+      "firstName",
+      "lastName",
+      "email",
+      "salary",
+      "department",
+      "designation",
+      "status",
+      "sequence"
+    )
+    .default("sequence"),
+
+  sortOrder: Joi.string()
+    .valid("ASC", "DESC")
+    .default("ASC")
 });
 
 const validateEmployeeQuery = (req, res, next) => {
