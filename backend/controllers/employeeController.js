@@ -1,15 +1,21 @@
 const employeeService = require('../services/employeeService');
 
-const getEmployees = async (req, res,next) => {
+const getEmployees = async (req, res, next) => {
   try {
-    const employees = await employeeService.getEmployees();
+    const { page, limit, search } = req.query;
+    const results = await employeeService.getEmployees({
+      page,
+      limit,
+      search,
+    });
     res.status(200).json({
       "success": true,
       "message": "Employees fetched successfully",
-      data: employees
+      data: results.data,
+      pagination: results.pagination
     });
   } catch (error) {
-    
+
     next(error); // Pass the error to the error handling middleware
   }
 }
@@ -38,7 +44,7 @@ const getEmployeeById = async (req, res, next) => {
 
 const createEmployee = async (req, res, next) => {
   try {
-    
+
 
     const employee = await employeeService.createEmployee(req.body);
     res.status(201).json({
@@ -94,7 +100,7 @@ const deleteEmployee = async (req, res, next) => {
       data: employee
     });
   } catch (error) {
-   
+
     next(error); // Pass the error to the error handling middleware
   }
 }

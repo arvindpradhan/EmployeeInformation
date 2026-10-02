@@ -1,7 +1,11 @@
 const employeeQueries = require('../queries/employeeQueries');
 
-const getEmployees = async (req, res) => {
-  return await employeeQueries.getAllEmployees();
+const getEmployees = async ({ page, limit, search }) => {
+  return await employeeQueries.getAllEmployees({
+    page,
+    limit,
+    search
+  });
 };
 const getEmployeeById = async (id) => {
   return await employeeQueries.getEmployeeById(id);

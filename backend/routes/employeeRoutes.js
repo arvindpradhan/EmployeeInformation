@@ -1,11 +1,16 @@
 const express = require('express');
 const validateEmployee = require('../middleware/validateEmployee');
 const employeeController = require("../controllers/employeeController");
-
+const validateEmployeeQuery = require('../middleware/validateEmployeeQuery');
 
 const router = express.Router();
 
-router.get('/', employeeController.getEmployees);
+router.get(
+  '/',
+  validateEmployeeQuery,
+  employeeController.getEmployees
+);
+
 router.get('/:id', employeeController.getEmployeeById);
 
 router.post(
