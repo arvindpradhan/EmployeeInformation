@@ -24,6 +24,11 @@ router.put(
   validateEmployee("update"),
   employeeController.updateEmployee
 );
+router.patch(
+  '/:id',
+  validateEmployee("patch"),
+  employeeController.updateEmployee
+);
 router.delete('/:id', employeeController.deleteEmployee);
 
 module.exports = router;

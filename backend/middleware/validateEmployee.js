@@ -12,16 +12,72 @@ const createEmployeeSchema = Joi.object({
 }).unknown(false);
 
 const updateEmployeeSchema = Joi.object({
+  firstName: Joi.string()
+    .trim()
+    .min(3)
+    .max(30)
+    .required(),
 
-  firstName: Joi.string().trim().min(3).max(30),
-  lastName: Joi.string().trim().max(30),
-  email: Joi.string().trim().email(),
-  salary: Joi.number().min(0).max(50000000),
-  department: Joi.string().trim().min(1),
-  designation: Joi.string().trim().min(1),
-  status: Joi.string().valid("active", "inactive")
+  lastName: Joi.string()
+    .trim()
+    .max(30)
+    .required(),
+
+  email: Joi.string()
+    .trim()
+    .email()
+    .required(),
+
+  salary: Joi.number()
+    .min(0)
+    .max(50000000)
+    .required(),
+
+  department: Joi.string()
+    .trim()
+    .min(1)
+    .required(),
+
+  designation: Joi.string()
+    .trim()
+    .min(1)
+    .required(),
+
+  status: Joi.string()
+    .valid("active", "inactive")
+    .required()
 
 }).unknown(false);
+
+const patchEmployeeSchema = Joi.object({
+  firstName: Joi.string()
+    .trim()
+    .min(3)
+    .max(30),
+
+  lastName: Joi.string()
+    .trim()
+    .max(30),
+
+  email: Joi.string()
+    .trim()
+    .email(),
+
+  salary: Joi.number()
+    .min(0)
+    .max(50000000),
+
+  department: Joi.string()
+    .trim()
+    .min(1),
+
+  designation: Joi.string()
+    .trim()
+    .min(1),
+
+  status: Joi.string()
+    .valid("active", "inactive")
+}).min(1).unknown(false);
 
 const validateEmployee = (mode) => {
   return (req, res, next) => {
@@ -35,11 +91,21 @@ const validateEmployee = (mode) => {
     //   status
     // } = req.body;
 
-    const schema =
-      mode === "create"
-        ? createEmployeeSchema
-        : updateEmployeeSchema;
+    const schemas = {
+      create: createEmployeeSchema,
+      update: updateEmployeeSchema,
+      patch: patchEmployeeSchema
+    };
 
+    const schema = schemas[mode];
+
+    // Invalid mode protection
+    if (!schema) {
+      return res.status(500).json({
+        success: false,
+        message: "Invalid validation mode"
+      });
+    }
     const { error, value } = schema.validate(req.body, {
       abortEarly: false
     });
