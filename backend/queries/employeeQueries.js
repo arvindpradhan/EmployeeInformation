@@ -6,24 +6,34 @@ const getAllEmployees = async ({
   limit = 10,
   search,
   sortBy = "sequence",
-  sortOrder = "ASC"
+  sortOrder = "ASC",
+  department,
+  status
 }) => {
 
   page = Number(page);
   limit = Number(limit);
   const offset = (page - 1) * limit;
 
-  const where = search
-    ? {
-      [Op.or]: [
-        { firstName: { [Op.like]: `%${search}%` } },
-        { lastName: { [Op.like]: `%${search}%` } },
-        { email: { [Op.like]: `%${search}%` } },
-        { department: { [Op.like]: `%${search}%` } },
-        { designation: { [Op.like]: `%${search}%` } }
-      ]
-    }
-    : {};
+ const where = {};
+
+if (search) {
+  where[Op.or] = [
+    { firstName: { [Op.like]: `%${search}%` } },
+    { lastName: { [Op.like]: `%${search}%` } },
+    { email: { [Op.like]: `%${search}%` } },
+    { department: { [Op.like]: `%${search}%` } },
+    { designation: { [Op.like]: `%${search}%` } }
+  ];
+}
+
+if (department) {
+  where.department = department;
+}
+
+if (status) {
+  where.status = status;
+}
 
   const result = await Employee.findAndCountAll({
     where,

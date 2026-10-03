@@ -2,13 +2,15 @@ const employeeService = require('../services/employeeService');
 
 const getEmployees = async (req, res, next) => {
   try {
-    const { page, limit, search, sortBy, sortOrder } = req.query;
+    const { page, limit, search, sortBy, sortOrder, department,  status } = req.query;
     const results = await employeeService.getEmployees({
       page,
       limit,
       search,
       sortBy,
-      sortOrder
+      sortOrder,
+      department,
+      status
     });
     res.status(200).json({
       "success": true,
