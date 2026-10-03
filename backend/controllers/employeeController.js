@@ -31,6 +31,7 @@ const getEmployeeById = async (req, res, next) => {
 
     if (!employee) {
       return res.status(404).json({
+        success: false,
         message: "Employee not found"
       });
     }
@@ -74,6 +75,7 @@ const updateEmployee = async (req, res, next) => {
     );
     if (!employee) {
       return res.status(404).json({
+        success: false,
         message: "Employee not found"
       });
     }
@@ -95,6 +97,7 @@ const deleteEmployee = async (req, res, next) => {
     );
     if (!employee) {
       return res.status(404).json({
+        success: false,
         message: "Employee not found"
       });
     }
