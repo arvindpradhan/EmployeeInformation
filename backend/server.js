@@ -3,28 +3,50 @@ const cors = require("cors");
 require("dotenv").config();
 
 const sequelize = require("./config/database");
-// const Employee = require("./models/Employee");
+
+const Employee = require("./models/Employee");
+const User = require("./models/User");
+
 const employeeRoutes = require("./routes/employeeRoutes");
+const authRoutes = require("./routes/authRoutes");
 const errorMiddleware = require("./middleware/errorMiddleware");
 
 const app = express();
 
+// =========================
 // Middlewares
+// =========================
+
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/employees", employeeRoutes);
-// Error handling middleware
-app.use(errorMiddleware); 
+// =========================
+// Routes
+// =========================
 
+app.use("/api/employees", employeeRoutes);
+app.use("/api/auth", authRoutes);
+
+// =========================
+// Error Handling Middleware
+// =========================
+
+app.use(errorMiddleware);
+
+// =========================
 // Test API
+// =========================
+
 app.get("/", (req, res) => {
   res.json({
     message: "Employee Management API is running",
   });
 });
 
-// Test database connection
+// =========================
+// Database Connection
+// =========================
+
 sequelize
   .authenticate()
   .then(() => {
@@ -43,4 +65,4 @@ sequelize
   })
   .catch((error) => {
     console.error("Database connection failed:", error);
-  })
+  });
